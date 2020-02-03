@@ -1,12 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>To Do</title>
+  <link href="favicon.ico?v=1.0" rel="icon" type="image/x-icon" />
+  <link rel="stylesheet" href="css/navbar.css">
+  <link rel="stylesheet" href="css/container.css">
+  <link rel="stylesheet" href="css/popup.css">
 </head>
+
 <body>
-    <h1>test data</h1>
+  <div class="navbar" id="navbar">
+    <button class="flex-item left" onclick="addNewList()" id="newlist">New List</button>
+    <div class="form-popup" id="myForm">
+      <div class="form-container">
+        <label>List Name</label>
+        <input type="text" oninput="enableCrt()" id="listname" autofocus>
+        <button class="btn" onclick="createList(event)" id="crtlist">Create</button>
+        <button class="btn" onclick="closeForm()">Close</button>
+      </div>
+    </div>
+    <div class='btn-group'>
+      <button onclick="highlight(event)" class="active" id="liststab">Lists</button>
+      <button onclick="highlight(event)">Today</button>
+      <button onclick="highlight(event)">Scheduled</button>
+    </div>
+    <div class="flex-item right">
+      <button class="flex-item" onclick="attachSearch()">Search</button>
+      <button class="flex-item" onclick="selectList()">Select</button>
+    </div>
+  </div>
+  <div class="navbar" id="tasknavbar">
+    <button class="flex-item left" onclick="goHome()" id="back">Back</button>
+    <div class='btn-group'>
+      <button onclick="highlight(event)">Lists</button>
+      <button onclick="highlight(event)" id="todaytab">Today</button>
+      <button onclick="highlight(event)" id="scheduledtab">Scheduled</button>
+    </div>
+    <button class="flex-item right" onclick="clearCompleted()">Clear Completed</button>
+  </div>
+  <div id="searchBar">
+    <input id="srchBar" type="search" placeholder="Search..." onkeyup="searchList(event)" autofocus />
+  </div>
+  <div class="container" id="contentList">
+    <div class="flex-list item" onclick="openList(event)" id="flexitem">
+      <div class="overflow" onclick="openListParent(event)">
+      </div>
+      <input type="checkbox" onclick="countCheck(event)">
+      <p></p>
+    </div>
+  </div>
+  <div class="taskcontainer" id="taskcontainer">
+    <div class='taskflex-item' id="detailitem">
+      <div class='row'>
+        <div class='column'></div>
+        <div class='column'>
+          Notes:
+          <textarea rows="8" cols="50"></textarea>
+        </div>
+        <div class='column'>
+          Priority:
+          <select>
+            <option value="0" selected="selected">None</option>
+            <option value="1">Low</option>
+            <option value="2">Medium</option>
+            <option value="3">High</option>
+          </select>
+          Due date:
+          <input type="date" name="bday">
+          <button onclick="deleteTask(event)" id="delete">Delete</button>
+        </div>
+        <div class='column'><button onclick="savedetails(event)" id="close">x</button></div>
+      </div>
+    </div>
+  </div>
+  <div class="form-popup" id="renameForm">
+    <form class="form-container">
+      <label>Rename</label><br>
+      <input type="text" name="newName" id="newName">
+      <button class="btn" onclick="rename(event)" id="renameBtn">Rename</button>
+      <button class="btn" onclick="closeRename(event)" id="renameBtn">Close</button>
+    </form>
+  </div>
+  <div class="bottomBar" id="donetaskbar">
+    <button class="flex-item left" onclick="showDoneTask()" id="showDone"></button>
+  </div>
+  <div class="bottomBar" id="bottombar">
+    <button class="flex-item left" onclick="renameSelected(event)" id="rename">Rename</button>
+    <button class="flex-item right" onclick="deleteSelected()" id="delete">Delete</button>
+  </div>
 </body>
+<script type="text/javascript" src="js/tableview.js"></script>
+
 </html>
