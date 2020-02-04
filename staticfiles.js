@@ -1,7 +1,6 @@
 const fs = require('fs').promises
 const path = require('path')
 const dir = path.join(__dirname, 'public')
-const res = 'Access-Control-Allow-Origin: *\r\nAccess-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept\r\n'
 const fileExt = {
   html: 'text/html',
   txt: 'text/plain',
@@ -45,13 +44,13 @@ async function serveStatic (reqObj, socket) {
     }
     const now = new Date()
     const expiry = new Date().setDate(now.getDate() + 7)
-    await socket.write(obj.status)
-    await socket.write('Content-Type: ' + obj.type + '\n')
-    await socket.write('Date :' + now + '\n')
-    await socket.write('Expires :' + new Date(expiry) + '\n')
-    await socket.write('Content-Length: ' + obj.body.length + '\n\n')
-    await socket.write(obj.body)
-    await socket.destroy()
+    socket.write(obj.status)
+    socket.write('Content-Type: ' + obj.type + '\n')
+    socket.write('Date :' + now + '\n')
+    socket.write('Expires :' + new Date(expiry) + '\n')
+    socket.write('Content-Length: ' + obj.body.length + '\n\n')
+    socket.write(obj.body)
+    socket.destroy()
   } catch {
     socket.write('HTTP/1.1 400 Badrequest')
     socket.write('Content-Type: text/plain\n')

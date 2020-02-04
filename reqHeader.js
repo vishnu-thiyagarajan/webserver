@@ -8,7 +8,7 @@ const reqHeader = function (data) {
   reqHead.reqParams = {}
   if (url.split('?')[1]) {
     const reqParamsList = url.split('?')[1].split('&')
-    for (const item in reqParamsList) {
+    for (const item of reqParamsList) {
       var [key, value] = item.split('=')
       reqHead.reqParams[key] = value
     }
