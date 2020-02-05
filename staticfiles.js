@@ -50,13 +50,13 @@ async function serveStatic (reqObj, socket) {
     socket.write('Expires :' + new Date(expiry) + '\n')
     socket.write('Content-Length: ' + obj.body.length + '\n\n')
     socket.write(obj.body)
-    socket.destroy()
+    socket.end()
   } catch {
     socket.write('HTTP/1.1 400 Badrequest')
     socket.write('Content-Type: text/plain\n')
     socket.write('Content-Length: 0\n\n')
     socket.write(Buffer.from('400 Badrequest', 'utf8'))
-    socket.destroy()
+    socket.end()
   }
 }
 module.exports = serveStatic

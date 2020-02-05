@@ -1,7 +1,7 @@
 const reqHeader = function (data) {
-  data = String(data)
+  data = data.toString()
   if (!data.trim('\n')) return {}
-  let requestHeader = data.split(/\n/)
+  let requestHeader = data.split(/\r\n/)
   const [method, url, protocol] = requestHeader[0].split(' ')
   const reqHead = { method: method, url: url, protocol: protocol }
   reqHead.reqPath = url.split('?')[0]
@@ -14,9 +14,10 @@ const reqHeader = function (data) {
     }
   }
   requestHeader = requestHeader.slice(1)
+  reqHead.body = requestHeader.pop()
   requestHeader.forEach(element => {
     var [key, value] = element.split(':')
-    reqHead[key] = value
+    if (key && value) reqHead[key] = value
   })
   return reqHead
 }
