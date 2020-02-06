@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/vishnu-thiyagarajan/webserver#readme",
   "dependencies": {
-    "nodemon": "^2.0.2"
+    "nodemon": "^2.0.2",
+    "pg": "^7.18.1"
   }
 }

@@ -1,4 +1,4 @@
-const urlDecode = function (reqObj, routes) {
+const urlParse = function (reqObj, routes) {
   const urlPathArray = reqObj.reqPath.split('/').slice(1)
   for (const [key, fn] of routes) {
     const params = {}
@@ -16,4 +16,4 @@ const urlDecode = function (reqObj, routes) {
   }
 }
 
-module.exports = urlDecode
+module.exports = urlParse

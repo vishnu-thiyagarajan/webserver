@@ -22,9 +22,9 @@ server.on('connection', function (socket) {
   console.log('connection created on ' + address)
 
   socket.on('data', async function (data) {
+    socket.setKeepAlive(true)
     const reqObj = await reqHeader(data)
-    const result = await serveStatic(reqObj, socket)
-    if (result) await routeSwitch(reqObj, routeMap, socket)
+    await routeSwitch(reqObj, routeMap, socket)
   })
   socket.once('close', function () {
     console.log('closing the connection on ' + address)
@@ -48,26 +48,32 @@ function app () {
     const cond = route.includes('/:')
     if (cond) routeMap.getUrlRoutes.set(route, fn)
     if (!cond) routeMap.getRoutes.set(route, fn)
+    routeMap.middleware.push(route)
   }
   obj.post = function (route, fn) {
     const cond = route.includes('/:')
     if (cond) routeMap.postUrlRoutes.set(route, fn)
     if (!cond) routeMap.postRoutes.set(route, fn)
+    routeMap.middleware.push(route)
   }
   obj.put = function (route, fn) {
     const cond = route.includes('/:')
     if (cond) routeMap.putUrlRoutes.set(route, fn)
     if (!cond) routeMap.putRoutes.set(route, fn)
+    routeMap.middleware.push(route)
   }
   obj.del = function (route, fn) {
     const cond = route.includes('/:')
     if (cond) routeMap.deleteUrlRoutes.set(route, fn)
     if (!cond) routeMap.deleteRoutes.set(route, fn)
+    routeMap.middleware.push(route)
   }
   return obj
 }
 
 module.exports = app
+const path = require('path')
+const dir = path.join(__dirname, 'public')
 const bodyparser = require('./bodyparser')
 const urlCheck = function (req, res, next) {
   res.status(200).send(req.body)
@@ -77,11 +83,12 @@ ser.listen(8000, () => {
   console.log('App running on port 8000.')
 })
 ser.use(bodyparser)
+ser.use(serveStatic(dir))
 ser.post('/check', urlCheck)
 ser.get('/check', urlCheck)
-// ser.use((req, res, next) => {
-//   res.status(404).send('<h1>404 page not found</h1>')
-// })
+ser.use((req, res, next) => {
+  res.status(404).send('<h1>404 page not found</h1>')
+})
 // const Pool = require('pg').Pool
 // const pool = new Pool({
 //   user: 'api_user',
