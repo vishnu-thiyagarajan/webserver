@@ -8,6 +8,7 @@ const fileType = {
   gif: 'image/gif',
   jpg: 'image/jpeg',
   ico: 'image/vnd',
+  mp4: 'video/mp4',
   png: 'image/png',
   svg: 'image/svg+xml',
   js: 'application/javascript'
@@ -22,18 +23,18 @@ const matchRoutes = {
 const routeSwitch = async function (reqObj, routeMap, socket) {
   const res = {}
   res.status = (code) => {
-    socket.write('HTTP/1.1' + code + '\r\n')
+    socket.write('HTTP/1.1 ' + code + '\r\n')
     return res
   }
   res.send = (data) => {
     let writeStr = 'Content-Type: *\r\n'
     const fileExt = path.extname(reqObj.reqPath).slice(1)
-    if (!fileExt && /(<([^>]+)>)/i.test(data)) writeStr = 'Content-Type: text/html\r\n'
+    if (!fileExt) writeStr = 'Content-Type: text/html\r\n'
+    if (fileExt) writeStr = 'Content-Type: ' + (fileType[fileExt] || '*') + '\r\n'
     if (typeof data === 'object') {
       data = JSON.stringify(data)
       writeStr = 'Content-Type: application/json\r\n'
     }
-    if (fileExt) writeStr = 'Content-Type: ' + (fileType[fileExt] || '*') + '\r\n'
     const now = new Date()
     const expiry = new Date().setDate(now.getDate() + 7)
     writeStr += 'Date :' + now + '\r\n'

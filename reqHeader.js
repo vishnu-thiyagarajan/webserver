@@ -1,6 +1,4 @@
 const reqHeader = function (data) {
-  data = data.toString()
-  if (!data.trim('\n')) return {}
   let requestHeader = data.split(/\r\n/)
   const [method, url, protocol] = requestHeader[0].split(' ')
   const reqHead = { method: method, url: url, protocol: protocol }
@@ -14,7 +12,6 @@ const reqHeader = function (data) {
     }
   }
   requestHeader = requestHeader.slice(1)
-  reqHead.body = requestHeader.pop()
   requestHeader.forEach(element => {
     var [key, value] = element.split(':')
     if (key && value) reqHead[key] = value
