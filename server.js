@@ -25,6 +25,7 @@ server.on('connection', function (socket) {
     reqStr = data.toString()
     if (begins && reqStr.includes('\r\n\r\n')) {
       [header, body] = reqStr.split('\r\n\r\n')
+      reqStr = ''
       reqObj = reqHeader(header)
       begins = 0
     }
