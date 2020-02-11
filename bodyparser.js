@@ -1,6 +1,7 @@
 module.exports = function (req, res, next) {
   if (!req.body) { req.body = {}; return }
   const contentType = req['Content-Type'].trim()
+  // if (contentType.startsWith('multipart/form-data')) console.log(req.body)
   if (contentType === 'application/json') req.body = JSON.parse(req.body)
   if (contentType === 'text/html') req.body = String(req.body)
   if (contentType === 'application/x-www-form-urlencoded') {
@@ -10,6 +11,7 @@ module.exports = function (req, res, next) {
       const [key, value] = kv.split('=')
       req.body[key] = value
     }
+    console.log(req.body)
   }
   next()
 }

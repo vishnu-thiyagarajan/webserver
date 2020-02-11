@@ -28,7 +28,7 @@ const routeSwitch = async function (reqObj, routeMap, socket) {
   }
   res.send = (data) => {
     const writeStr = buildRes(data, reqObj.reqPath)
-    socket.write(Buffer.from(writeStr + data))
+    socket.write(Buffer.from(writeStr))
     socket.destroy()
   }
   for (const handler of routeMap.middleware) {
@@ -61,6 +61,6 @@ function buildRes (data, reqPath) {
   writeStr += 'Expires :' + new Date(expiry) + '\r\n'
   writeStr += 'Access-Control-Allow-Origin: *\r\nAccess-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept\r\n'
   writeStr += 'Content-Length:' + Buffer.from(data).byteLength + '\r\n\r\n'
-  return writeStr
+  return writeStr + data
 }
 module.exports = routeSwitch
