@@ -1,4 +1,5 @@
 const path = require('path')
+const fs = require('fs')
 
 const db = require('./queries')
 const bodyparser = require('./bodyparser')
@@ -14,6 +15,11 @@ ser.use(bodyparser)
 ser.use(serveStatic(dir))
 
 function createFile (req, res, next) {
+  const filePath = req.reqPath + '/' + req.body.filename.slice(1, -1)
+  fs.writeFile(path.join(__dirname, filePath), req.body.body, function (err, file) {
+    if (err) throw err
+    console.log('Saved!')
+  })
   res.status(200).send(req.body)
 }
 
