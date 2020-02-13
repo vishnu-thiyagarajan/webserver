@@ -26,13 +26,21 @@ function buildRes (data, cookie, reqPath) {
   writeStr += 'Date :' + now + '\r\n'
   writeStr += 'Expires :' + new Date(expiry) + '\r\n'
   writeStr += 'Access-Control-Allow-Origin: *\r\nAccess-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept\r\n'
-  writeStr += 'Content-Length:' + Buffer.from(data).byteLength + '\r\n\r\n'
+  writeStr += 'Content-Length:' + Buffer.from(data).byteLength
   if (Object.keys(cookie).length !== 0) {
     for (const [key, value] of Object.entries(cookie)) {
-      writeStr += 'Set-Cookie: ' + key + '=' + value[0] + ' ' + JSON.stringify(value[1]).trim().slice(1, -1)
+      writeStr += 'Set-Cookie: ' + key + '=' + value[0] + ';'
+      if (Object.keys(value[1]).length !== 0) writeStr += ' ' + buildProps(value[1]).rightTrim()
     }
   }
-  return writeStr + data
+  return writeStr + '\r\n\r\n' + data
 }
 
+function buildProps (prop) {
+  let propStr = ''
+  for (const [key, value] of Object.entries(prop)) {
+    propStr += key + '=' + String(value) + '; '
+  }
+  return propStr
+}
 module.exports = buildRes

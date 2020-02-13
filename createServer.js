@@ -24,7 +24,11 @@ server.on('connection', function (socket) {
     }
     if (!reqObj['Content-Length'] || reqObj['Content-Length'] * 1 <= body.length) {
       reqObj.body = body.slice(0, reqObj['Content-Length'] * 1)
-      await routeSwitch(reqObj, routeMap, socket)
+      try {
+        await routeSwitch(reqObj, routeMap, socket)
+      } catch (err) {
+        console.log(err)
+      }
       reqStr = ''
       begins = 1
     }

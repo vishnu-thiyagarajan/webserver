@@ -20,7 +20,7 @@ const routeSwitch = async function (reqObj, routeMap, socket) {
     socket.write(Buffer.from(writeStr))
     socket.destroy()
   }
-  res.cookie = (key, value, prop) => {
+  res.cookie = (key, value, prop = {}) => {
     cookie[key] = [value, prop]
     return res
   }
