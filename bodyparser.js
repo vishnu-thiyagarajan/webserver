@@ -1,3 +1,4 @@
+const parseMultipart = require('./multipartParser')
 module.exports = function (req, res, next) {
   if (!req.body) { req.body = {}; return }
   const contentType = req['Content-Type'].trim()
@@ -16,24 +17,4 @@ function decode (body, splitter) {
     body[key] = value
   }
   return body
-}
-
-function parseMultipart (body, contentType) {
-  const obj = { content: '' }
-  let start = true
-  const bound = contentType.split('; boundary=')[1].trim('-')
-  for (const line of body.split('\n')) {
-    if (line.includes(bound) && !start) break
-    if (line.includes(bound) && start) start = false
-    if (!line.includes(bound)) obj.content += line
-    obj.content += '\n'
-  }
-  obj.body = obj.content.split('\r\n\r\n')[1].trim('\r\n')
-  obj.content = obj.content.split('\r\n\r\n')[0].trim('\n')
-  for (const kv of obj.content.split(/;|\r\n/)) {
-    const [key, value] = kv.trim('\r\n').split(/:|=/)
-    obj[key] = value.trim('"')
-  }
-  console.log(obj)
-  return obj
 }
