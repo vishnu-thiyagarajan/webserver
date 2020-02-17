@@ -31,7 +31,6 @@ const createList = async (request, response) => {
   try {
     const listname = request.body.listname
     const result = await pool.query(`INSERT INTO lists (listname) VALUES ('${listname}') RETURNING id`)
-    response.cookie('keyyyy', 'vaaaaaaaaaal')
     response.status(200).send([result.rows[0].id.toString()])
   } catch (error) {
     response.status(500).send(['unable to insert data'])

@@ -29,8 +29,8 @@ function buildRes (data, cookie, reqPath) {
   writeStr += 'Content-Length:' + Buffer.from(data).byteLength
   if (Object.keys(cookie).length !== 0) {
     for (const [key, value] of Object.entries(cookie)) {
-      writeStr += 'Set-Cookie: ' + key + '=' + value[0] + ';'
-      if (Object.keys(value[1]).length !== 0) writeStr += ' ' + buildProps(value[1]).rightTrim()
+      writeStr += ';\r\nSet-Cookie: ' + key + '=' + value[0]
+      if (Object.keys(value[1]).length !== 0) writeStr += ' ' + buildProps(value[1])
     }
   }
   return writeStr + '\r\n\r\n' + data

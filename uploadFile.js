@@ -7,11 +7,9 @@ function uploadFile (storagePath) {
     const fileObj = req.body.filter(item => item['Content-Type'])[0]
     try {
       const filePath = path.join(storagePath, fileObj.filename.replace(/"/g, ''))
-      await fs.writeFile(filePath, fileObj.value, function (err) {
-        if (err) throw err
-      })
+      await fs.writeFile(filePath, fileObj.value)
     } catch (err) {
-      res.status(200).send(err)
+      res.status(500).send(err)
     }
     res.status(200).send('file Uploaded')
   }
