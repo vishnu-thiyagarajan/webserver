@@ -16,23 +16,19 @@ server.on('connection', function (socket) {
     if (begins) {
       header = reqStr.split('\r\n\r\n')[0]
       body = data.slice(data.indexOf('\r\n\r\n'))
-      // console.log(header)
-      // console.log(body)
       reqObj = reqHeader(header)
       reqStr = Buffer.from('')
       begins = 0
     }
-    socket.setKeepAlive(reqObj.Connection === ' keep-alive')
-    if (reqObj['Content-Length'] && reqObj['Content-Length'] * 1 > body.byteLength) body = Buffer.concat([body, data])
+    if (!begins && reqObj['Content-Length'] && reqObj['Content-Length'] * 1 > body.byteLength) body = Buffer.concat([body, data])
     if (!reqObj['Content-Length'] || reqObj['Content-Length'] * 1 <= body.byteLength) {
       reqObj.body = body.slice(0, reqObj['Content-Length'] * 1)
       try {
-        console.log(reqObj.body)
         await routeSwitch(reqObj, routeMap, socket)
       } catch (err) {
         console.log(err)
       }
-      reqStr = ''
+      reqStr = Buffer.from('')
       begins = 1
     }
   })

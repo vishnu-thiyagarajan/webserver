@@ -7,6 +7,7 @@ const matchRoutes = {
   PUT: ['putRoutes', 'putUrlRoutes'],
   DELETE: ['deleteRoutes', 'deleteUrlRoutes']
 }
+let send = 0
 let cookie = {}
 const routeSwitch = async function (reqObj, routeMap, socket) {
   const res = {}
@@ -17,7 +18,7 @@ const routeSwitch = async function (reqObj, routeMap, socket) {
   res.send = (data) => {
     const writeStr = buildRes(data, cookie, reqObj.reqPath)
     socket.write(Buffer.from(writeStr))
-    socket.destroy()
+    send = 1
     cookie = {}
   }
   res.cookie = (key, value, prop = {}) => {
@@ -29,7 +30,7 @@ const routeSwitch = async function (reqObj, routeMap, socket) {
     return res
   }
   for (const handler of routeMap.middleware) {
-    if (socket.destroyed) break
+    if (send) break
     if (typeof handler !== 'string') await handler(reqObj, res, () => {})
     if (typeof handler === 'string') {
       const [route, urlRoute] = matchRoutes[reqObj.method]

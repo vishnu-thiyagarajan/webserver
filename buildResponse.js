@@ -26,6 +26,7 @@ function buildRes (data, cookie, reqPath) {
   writeStr += 'Date :' + now + '\r\n'
   writeStr += 'Expires :' + new Date(expiry) + '\r\n'
   writeStr += 'Access-Control-Allow-Origin: *\r\nAccess-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept\r\n'
+  writeStr += 'Keep-Alive: timeout=5, max=10000\r\n'
   writeStr += 'Content-Length:' + Buffer.from(data).byteLength
   if (Object.keys(cookie).length !== 0) {
     for (const [key, value] of Object.entries(cookie)) {
